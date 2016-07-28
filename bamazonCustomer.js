@@ -74,7 +74,7 @@ function promptCatalogue(){
   inquirer.prompt(customerQuestions).then(function (results){
               var productIdInput = results.id;
               var productInventoryInput = results.numUnits;
-              console.log(productIdInput);
+              console.log(productIdInput, productInventoryInput);
               console.log(productInventoryInput);
             connection.query('SELECT * FROM products WHERE ?',{
                         ID: productIdInput,
