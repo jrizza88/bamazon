@@ -1,6 +1,6 @@
 // require node packages (mySQL and prompt) in order to complete the assignment
 var mysql = require('mysql');
-var prompt = require('prompt');
+var inquirer = require('inquirer');
 // using these node packages for better looking colors and organization for the application
 var colors = require('colors');
 var cliTable = require('cli-table');
@@ -19,7 +19,7 @@ var catalogue =
           ["jetblack flatscreen tv", "haxbook notepad",
            "purple tonic keyboard", "red haxbook laptop",
            "art canvas", "paint brush", "colors array set",
-           "blue hoodie", "white shorts"];
+           "blue hoodie", "white shorts", "class snapback hat"];
 
 // checking to see if the catalogue gets listed
   console.log("These are the list of all items in the catalogue: ", catalogue);
@@ -42,14 +42,20 @@ connection.connect(function(err){
   var customerQuestions = [{
      //Question 1: ID of the product they would like to buy
      name: "id",
-     type: "rawlist",
+    // type: "rawlist",
      message: "which product id number would you like?",
-     choices: catalogue
+    // choices: catalogue
     },{
    // Questions 2: how many units of the product they would like to buy
     name: "numUnits",
     message: "how many units would you like?"
-    }];
+    //}
+    //   {
+    // type: "confirm",
+    // message: "Are you sure?",
+    // name: "confirm",
+    // default: true
+  }];
 
 
                     function showCatalogue() {
@@ -57,6 +63,7 @@ connection.connect(function(err){
                             if (err) {
                               throw err;
                             } else {
+                              // the results below are for each product info per row. 
                                 results.forEach (function(row) {
                                   console.log(""  + "\nId: " + row.id + "\nProduct: " + row.productName +
                                    "\nDepartment: " + row.departmentName + "\nPrice: " + row.price +
@@ -71,13 +78,13 @@ connection.connect(function(err){
 
 
 function promptCatalogue(){
-  inquirer.prompt(customerQuestions).then(function (results){
-              var productIdInput = results.id;
+  inquirer.prompt(customerQuestions).then(function(results){
+              var customerIdInput = results.id;
               var productInventoryInput = results.numUnits;
-              console.log(productIdInput, productInventoryInput);
+              console.log(customerIdInput);
               console.log(productInventoryInput);
             connection.query('SELECT * FROM products WHERE ?',{
-                        ID: productIdInput,
+                        id: customerIdInput,
             }, function (err, rows) {
               if (err){
                 throw err;
@@ -88,6 +95,27 @@ function promptCatalogue(){
                   console.log("Insufficient quantity!")
                 } else {
                   console.log("There are still enough products")
+
+                  var currentInventory = row.stockQuantity;
+                  console.log(currentInventory);
+                  console.log(customerIdInput);
+           // used W3schools to see how I can update the database
+                  connection.query('UPDATE products SET ? WHERE ?', [{
+                    stockQuantity: currentInventory - customerIdInput,
+                  },{
+                    id: customerIdInput,
+                  }], function(err){
+                    if (err){
+                      throw err
+                    }
+                  })
+                  //  console logs go here to display results...
+                  console.log("\n------------------------------");
+                  console.log("Total cost of purchase: ",row.price * customerIdInput);
+                  console.log("current Inventory is: ", row.stockQuantity - productInventoryInput);
+                  console.log("\n------------------------------");
+                  console.log("Thank you for shopping at Bamazon!");
+                
                 }
                  
               })
