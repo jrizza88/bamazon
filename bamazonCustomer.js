@@ -123,8 +123,6 @@ connection.connect(function(err){
 
 showCatalogue();
 
-  
-    // if there is enough of the product, order needs to be fulfilled here||| 
             
 
 
