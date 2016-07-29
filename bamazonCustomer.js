@@ -3,7 +3,7 @@ var mysql = require('mysql');
 var inquirer = require('inquirer');
 // using these node packages for better looking colors and organization for the application
 var colors = require('colors');
-var cliTable = require('cli-table');
+var Table = require('cli-table');
 
 // create the connection to the database that I want to use 
 var connection = mysql.createConnection({
@@ -31,7 +31,7 @@ connection.connect(function(err){
     throw err;
   }
 // informs user that the connection to the application and database was successful
-  console.log('Welcome to Bamazon!'.rainbow);
+  console.log('Welcome to Bamazon!'.blue);
 });
 
 // ****use queries to test out and run the different required components of the application***** \\
@@ -107,11 +107,11 @@ connection.connect(function(err){
                                 //  console logs go here to display results...
                                 console.log("\n------------------------------");
                                //Once update goes through, show customer total cost of their purchase
-                                console.log("Total cost of purchase: ".bgYellow,row.price * customerIdInput);
+                                console.log(colors.bgYellow("Total cost of purchase: ",row.price * customerIdInput));
                              // update the SQL DB to reflect remaining quantity
-                                console.log("current Inventory is now: ".bgYellow, row.stockQuantity - productInventoryInput);
+                                console.log(colors.bgYellow("current Inventory is now: ", row.stockQuantity - productInventoryInput));
                                 console.log("\n------------------------------");
-                                console.log("Thank you for shopping at Bamazon!".rainbow);
+                                console.log("Thank you for shopping at Bamazon!".blue);
                               
                               }   
                        })
@@ -122,8 +122,6 @@ connection.connect(function(err){
 
 
 showCatalogue();
-
-            
 
 
 // YOU FINISHED!
