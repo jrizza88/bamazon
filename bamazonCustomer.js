@@ -1,9 +1,9 @@
 // require node packages (mySQL and prompt) in order to complete the assignment
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-// using these node packages for better looking colors and organization for the application
+// using the color npm for to liven up the terminal for this homework assignment
 var colors = require('colors');
-var Table = require('cli-table');
+
 
 // create the connection to the database that I want to use 
 var connection = mysql.createConnection({
