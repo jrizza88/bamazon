@@ -74,9 +74,6 @@ connection.connect(function(err){
                     inquirer.prompt(customerQuestions).then(function(results){
                                   var customerIdInput = results.id;
                                   var productInventoryInput = results.numUnits;
-                                  // used this to check if it worked.
-                                  //console.log(customerIdInput);
-                                  //console.log(productInventoryInput);
                           connection.query('SELECT * FROM products WHERE ?',{
                                         id: customerIdInput,
                                 }, function (err, rows) {
@@ -85,18 +82,16 @@ connection.connect(function(err){
                                             } else {
                                   // if not enough QUANTITY console.log ("Insufficient quantity!");
                                       rows.forEach(function(row){
-                                        if (row.stockQuantity === 0){
+                                        if (row.stockQuantity <= 0){
                                         console.log("Insufficient quantity!".bold.bgRed)
                                       } else {
                                         console.log("There are still enough products!".bold.bgGreen)
-
                                         var currentInventory = row.stockQuantity;
                                         // checking to see if the inventory and customer input variables work correctly.
                                         console.log("current inventory is:".underline, currentInventory);
                                         console.log("you purchased:".underline, customerIdInput);
-                     // used W3schools to see how I can update the database
-                        connection.query('UPDATE products SET ? WHERE ?', [{
-                           stockQuantity: currentInventory - customerIdInput,
+                          connection.query('UPDATE products SET ? WHERE ?', [{
+                              stockQuantity: currentInventory - productInventoryInput
                               },{
                               id: customerIdInput,
                                 }], function(err){
@@ -105,12 +100,12 @@ connection.connect(function(err){
                                   }
                                 })
                                 //  console logs go here to display results...
-                                console.log("\n------------------------------");
+                                console.log("\A------------------------------");
                                //Once update goes through, show customer total cost of their purchase
                                 console.log(colors.bgYellow("Total cost of purchase: ",row.price * customerIdInput));
                              // update the SQL DB to reflect remaining quantity
                                 console.log(colors.bgYellow("current Inventory is now: ", row.stockQuantity - productInventoryInput));
-                                console.log("\n------------------------------");
+                                console.log("\A------------------------------");
                                 console.log("Thank you for shopping at Bamazon!".blue);
                               
                               }   

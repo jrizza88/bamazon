@@ -11,7 +11,6 @@ stockQuantity INTEGER,
 PRIMARY KEY (id)
 );
 
--- DROP TABLE products;
 
 INSERT INTO products (productName, departmentName, price, stockQuantity)
 VALUES ("jetblack flatscreen tv", "technology", 2000, 200);
